@@ -2,19 +2,12 @@
   "name": "Smart Daily Planner",
   "short_name": "Planner",
   "description": "A smart daily planner to manage tasks with date and time",
-  "id": "/index.html",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
+  "id": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#4facfe",
+  "theme_color": "#667eea",
   "icons": [
-    {
-      "src": "icon.png",
-      "sizes": "256x256",
-      "type": "image/png"
-    }
-  ],
-  "screenshots": [
     {
       "src": "icon.png",
       "sizes": "256x256",
