@@ -1,0 +1,99 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container */
+.container {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 20px;
+    width: 420px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Title */
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Input Section */
+.input-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+#taskDate, #taskTime {
+    width: 48%;
+}
+
+#taskInput {
+    width: 100%;
+}
+
+/* Add Button */
+button {
+    padding: 10px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Task Cards */
+li {
+    list-style: none;
+    background: #f4f6fb;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Task Text */
+li span {
+    flex: 1;
+    text-align: left;
+}
+
+/* Buttons inside task */
+li button {
+    width: auto;
+    margin-left: 5px;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+li:hover {
+    transform: scale(1.03);
+    transition: 0.2s;
+}
+button:hover {
+    opacity:0.9;
+}
+
+/* Completed task */
+.completed {
+    text-decoration: line-through;
+    color: green;
+    font-weight: bold;
+}
