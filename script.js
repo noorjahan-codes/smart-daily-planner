@@ -1,81 +1,34 @@
 function addTask() {
-    let taskInput = document.getElementById("taskInput");
-    let dateInput = document.getElementById("taskDate");
-    let timeInput = document.getElementById("taskTime");
+    const taskInput = document.getElementById("taskInput").value;
+    const taskDate = document.getElementById("taskDate").value;
+    const taskTime = document.getElementById("taskTime").value;
 
-    let taskText = taskInput.value.trim();
-    let date = dateInput.value;
-    let time = timeInput.value;
+    if (!taskInput) return; // allow empty date/time
 
-    if (taskText === "") {
-        alert("Please enter a task");
-        return;
-    }
+    const li = document.createElement("li");
 
-    let formattedTime = "";
-    if (time) {
-        let [hours, minutes] = time.split(":");
-        hours = parseInt(hours);
+    li.dataset.date = taskDate;
+    li.dataset.time = taskTime;
 
-        let ampm = hours >= 12 ? "PM" : "AM";
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-
-        formattedTime = hours + ":" + minutes + " " + ampm;
-    }
-
-    let fullTask = "";
-
-    if (date && formattedTime) {
-        fullTask = date + " - " + formattedTime + " - " + taskText;
-    } else if (date) {
-        fullTask = date + " - " + taskText;
-    } else if (formattedTime) {
-        fullTask = formattedTime + " - " + taskText;
-    } else {
-        fullTask = taskText;
-    }
-
-    let li = document.createElement("li");
-
-    let span = document.createElement("span");
-    span.textContent = fullTask;
-
-    span.onclick = function () {
-        span.classList.toggle("completed");
-        saveTasks();
-    };
-
-    let editBtn = document.createElement("button");
-    editBtn.textContent = "Edit";
-    editBtn.onclick = function () {
-        let newTask = prompt("Edit task:", span.textContent);
-        if (newTask) {
-            span.textContent = newTask;
-            saveTasks();
-        }
-    };
-
-    let deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.onclick = function () {
-        li.remove();
-        saveTasks();
-    };
-
-    li.appendChild(span);
-    li.appendChild(editBtn);
-    li.appendChild(deleteBtn);
+    li.innerHTML = `
+        <span>${taskInput}</span>
+        <button onclick="editTask(this)">Edit</button>
+        <button onclick="deleteTask(this)">Delete</button>
+    `;
 
     document.getElementById("taskList").appendChild(li);
 
-    taskInput.value = "";
-    dateInput.value = "";
-    timeInput.value = "";
+    li.querySelector("span").onclick = function () {
+        this.classList.toggle("completed");
+        saveTasks();
+    };
 
     saveTasks();
-}
 
+    document.getElementById("taskInput").value = "";
+    document.getElementById("taskDate").value = "";
+    document.getElementById("taskTime").value = "";
+}
 function saveTasks() {
     localStorage.setItem("tasks", document.getElementById("taskList").innerHTML);
 }
@@ -166,3 +119,54 @@ window.onload = function () {
         document.getElementById("taskList").appendChild(li);
     });
 };
+function saveTasks() {
+    const tasks = [];
+    document.querySelectorAll("#taskList li").forEach(li => {
+        const span = li.querySelector("span");
+        const completed = span.classList.contains("completed");
+        const text = span.textContent;
+        const date = li.dataset.date || "";
+        const time = li.dataset.time || "";
+        tasks.push({ text, date, time, completed });
+    });
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+window.onload = function () {
+    checkUser(); // login system
+
+    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    savedTasks.forEach(task => {
+        const li = document.createElement("li");
+        li.dataset.date = task.date;
+        li.dataset.time = task.time;
+
+        li.innerHTML = `
+            <span class="${task.completed ? "completed" : ""}">${task.text}</span>
+            <button onclick="editTask(this)">Edit</button>
+            <button onclick="deleteTask(this)">Delete</button>
+        `;
+
+        li.querySelector("span").onclick = function () {
+            this.classList.toggle("completed");
+            saveTasks();
+        };
+
+        document.getElementById("taskList").appendChild(li);
+    });
+};
+function editTask(btn) {
+    const li = btn.parentElement;
+    const span = li.querySelector("span");
+    const newText = prompt("Edit task:", span.textContent);
+    if (newText) {
+        span.textContent = newText;
+        saveTasks();
+    }
+}
+
+function deleteTask(btn) {
+    const li = btn.parentElement;
+    li.remove();
+    saveTasks();
+}
