@@ -10,18 +10,35 @@
 <body>
 
 <div class="container">
+    <h2 id="welcomeMsg"></h2>
     <h1>Smart Daily Planner</h1>
 
+    <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
     <div class="input-section">
-    <input type="date" id="taskDate">
-    <input type="time" id="taskTime">
-    <input type="text" id="taskInput" placeholder="Enter a task">
-    <button onclick="addTask()">Add</button>
-</div>
+
+        <label>Date:</label>
+        <input type="date" id="taskDate">
+
+        <label>Time:</label>
+        <input type="time" id="taskTime">
+
+        <input type="text" id="taskInput" placeholder="Enter a task" onkeypress="handleEnter(event)">
+
+        <button onclick="addTask()">Add</button>
+    </div>
+
+    <input type="text" id="searchInput" placeholder="Search tasks..." onkeyup="searchTask()">
+    <div class="filter-buttons">
+    <button onclick="filterTasks('all')">All</button>
+    <button onclick="filterTasks('completed')">Completed</button>
+    <button onclick="filterTasks('pending')">Pending</button>
+    </div>
 
     <ul id="taskList"></ul>
-    
+
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>

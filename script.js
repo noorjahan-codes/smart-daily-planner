@@ -1,83 +1,66 @@
-let tasks = [];
-
-// Load saved tasks
-window.onload = function () {
-    let savedTasks = localStorage.getItem("tasks");
-    if (savedTasks) {
-        tasks = JSON.parse(savedTasks);
-        tasks.forEach(task => createTaskElement(task));
-    }
-};
-
 function addTask() {
-    let input = document.getElementById("taskInput");
-    let date = document.getElementById("taskDate").value;
-    let time = document.getElementById("taskTime").value;
+    let taskInput = document.getElementById("taskInput");
+    let dateInput = document.getElementById("taskDate");
+    let timeInput = document.getElementById("taskTime");
 
-    let taskText = input.value;
+    let taskText = taskInput.value.trim();
+    let date = dateInput.value;
+    let time = timeInput.value;
 
     if (taskText === "") {
         alert("Please enter a task");
         return;
     }
 
+    let formattedTime = "";
+    if (time) {
+        let [hours, minutes] = time.split(":");
+        hours = parseInt(hours);
+
+        let ampm = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+
+        formattedTime = hours + ":" + minutes + " " + ampm;
+    }
+
     let fullTask = "";
 
-if (date && time) {
-    fullTask = date + " - " + time + " - " + taskText;
-} else if (date) {
-    fullTask = date + " - " + taskText;
-} else if (time) {
-    fullTask = time + " - " + taskText;
-} else {
-    fullTask = taskText;
-}
+    if (date && formattedTime) {
+        fullTask = date + " - " + formattedTime + " - " + taskText;
+    } else if (date) {
+        fullTask = date + " - " + taskText;
+    } else if (formattedTime) {
+        fullTask = formattedTime + " - " + taskText;
+    } else {
+        fullTask = taskText;
+    }
 
-    tasks.push(fullTask);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-
-    createTaskElement(fullTask);
-
-    input.value = "";
-}
-
-// Create task UI
-function createTaskElement(task) {
     let li = document.createElement("li");
 
     let span = document.createElement("span");
-    span.innerText = task;
+    span.textContent = fullTask;
 
-    // Mark complete
     span.onclick = function () {
         span.classList.toggle("completed");
+        saveTasks();
     };
 
-    // Edit
     let editBtn = document.createElement("button");
-    editBtn.innerText = "Edit";
-
+    editBtn.textContent = "Edit";
     editBtn.onclick = function () {
-        let newTask = prompt("Edit task:", span.innerText);
+        let newTask = prompt("Edit task:", span.textContent);
         if (newTask) {
-            span.innerText = newTask;
-
-            let index = tasks.indexOf(task);
-            if (index !== -1) {
-                tasks[index] = newTask;
-                localStorage.setItem("tasks", JSON.stringify(tasks));
-            }
+            span.textContent = newTask;
+            saveTasks();
         }
     };
 
-    // Delete
     let deleteBtn = document.createElement("button");
-    deleteBtn.innerText = "X";
-
+    deleteBtn.textContent = "Delete";
     deleteBtn.onclick = function () {
         li.remove();
-        tasks = tasks.filter(t => t !== task);
-        localStorage.setItem("tasks", JSON.stringify(tasks));
+        saveTasks();
     };
 
     li.appendChild(span);
@@ -85,11 +68,101 @@ function createTaskElement(task) {
     li.appendChild(deleteBtn);
 
     document.getElementById("taskList").appendChild(li);
+
+    taskInput.value = "";
+    dateInput.value = "";
+    timeInput.value = "";
+
+    saveTasks();
 }
 
-// Enter key support
-document.getElementById("taskInput").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        addTask();
+function saveTasks() {
+    localStorage.setItem("tasks", document.getElementById("taskList").innerHTML);
+}
+
+window.onload = function () {
+    document.getElementById("taskList").innerHTML = localStorage.getItem("tasks") || "";
+};
+
+function searchTask() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let tasks = document.getElementById("taskList").getElementsByTagName("li");
+
+    for (let i = 0; i < tasks.length; i++) {
+        let text = tasks[i].innerText.toLowerCase();
+        tasks[i].style.display = text.includes(input) ? "" : "none";
     }
-});
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+}
+function handleEnter(event) {
+   if (event.key === "Enter"){
+     addTask();
+}
+}
+function filterTasks(type) {
+    let tasks = document.querySelectorAll("#taskList li");
+
+    tasks.forEach(task => {
+        let span = task.querySelector("span");
+        let isCompleted = span.classList.contains("completed");
+
+        if (type === "all") {
+            task.style.display = "flex";
+        } else if (type === "completed") {
+            task.style.display = isCompleted ? "flex" : "none";
+        } else if (type === "pending") {
+            task.style.display = !isCompleted ? "flex" : "none";
+        }
+    });
+}
+function checkUser() {
+    let username = localStorage.getItem("username");
+
+    if (!username) {
+        username = prompt("Enter your name:");
+        if (username) {
+            localStorage.setItem("username", username);
+        }
+    }
+
+    if (username) {
+        document.getElementById("welcomeMsg").textContent = "Welcome, " + username + " 😊";
+    }
+}
+
+window.onload = function () {
+    checkUser();
+
+    let savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    savedTasks.forEach(taskHTML => {
+        let li = document.createElement("li");
+        li.innerHTML = taskHTML;
+
+        let span = li.querySelector("span");
+        span.onclick = function () {
+            span.classList.toggle("completed");
+            saveTasks();
+        };
+
+        let editBtn = li.querySelector("button:nth-child(2)");
+        editBtn.onclick = function () {
+            let newTask = prompt("Edit task:", span.textContent);
+            if (newTask) {
+                span.textContent = newTask;
+                saveTasks();
+            }
+        };
+
+        let deleteBtn = li.querySelector("button:nth-child(3)");
+        deleteBtn.onclick = function () {
+            li.remove();
+            saveTasks();
+        };
+
+        document.getElementById("taskList").appendChild(li);
+    });
+};

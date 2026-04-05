@@ -24,6 +24,14 @@ h1 {
     color: #333;
 }
 
+/* Labels */
+label {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    width: 100%;
+}
+
 /* Input Section */
 .input-section {
     display: flex;
@@ -36,7 +44,6 @@ input {
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    outline: none;
 }
 
 #taskDate, #taskTime {
@@ -47,7 +54,15 @@ input {
     width: 100%;
 }
 
-/* Add Button */
+/* Search */
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+/* Button */
 button {
     padding: 10px;
     background: #667eea;
@@ -55,10 +70,22 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    width: 100%;
+}
+li button {
+     width: auto;
+     padding: 5px 8px;
+     font-size: 12px;
+     margine-left: 5px;
 }
 
-/* Task Cards */
+/* Task List */
+#taskList {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 10px;
+}
+
+/* Task Item */
 li {
     list-style: none;
     background: #f4f6fb;
@@ -66,34 +93,50 @@ li {
     padding: 12px;
     border-radius: 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
-/* Task Text */
 li span {
     flex: 1;
     text-align: left;
+    word-break: break-word;
 }
 
-/* Buttons inside task */
-li button {
-    width: auto;
-    margin-left: 5px;
-    padding: 5px 10px;
-    border-radius: 6px;
-}
-li:hover {
-    transform: scale(1.03);
-    transition: 0.2s;
-}
-button:hover {
-    opacity:0.9;
-}
-
-/* Completed task */
+/* Completed */
 .completed {
     text-decoration: line-through;
     color: green;
-    font-weight: bold;
+}
+
+/* Dark Mode */
+.dark-mode {
+    background: #1a202c;
+    color: white;
+}
+
+.dark-mode .container {
+    background: #2d3748;
+}
+
+.dark-mode li {
+    background: #4a5568;
+}
+
+.dark-mode input {
+    background: #2d3748;
+    color: white;
+}
+
+.dark-mode h1 {
+    color: white;
+}
+.filter-buttons {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.filter-buttons button {
+    flex: 1;
+    padding: 8px;
 }
