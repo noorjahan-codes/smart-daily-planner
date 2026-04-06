@@ -140,3 +140,68 @@ li span {
     flex: 1;
     padding: 8px;
 }
+.help-btn {
+    float: right;
+}
+
+.help-box {
+    display: none;
+    background: #eee;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+.row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.row label {
+    width: 60px;
+    font-weight: bold;
+}
+
+.row input {
+    flex: 1;
+}
+body.dark {
+    background: #121212;
+    color: white;
+}
+
+body.dark .container {
+    background: #1e1e1e;
+    color: white;
+}
+
+body.dark input {
+    background: #333;
+    color: white;
+    border: 1px solid #555;
+}
+
+body.dark button {
+    background: #444;
+    color: white;
+}
+
+body.dark li {
+    background: #2a2a2a;
+}
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px;
+}
+.right-buttons button {
+    padding: 8px 10px;
+    font-size: 16px;
+}
